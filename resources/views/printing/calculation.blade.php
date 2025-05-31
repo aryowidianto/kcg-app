@@ -12,18 +12,38 @@
 
         @if(session('calculation_result'))
             <div class="alert alert-info">
-                <h4><i class="icon fas fa-info-circle"></i> Hasil Kalkulasi Kertas</h4>
+                <h4><i class="icon fas fa-info-circle"></i> Hasil Kalkulasi</h4>
                 <div class="row">
                     <div class="col-md-6">
+                        <h5><i class="fas fa-paperclip"></i> Kertas</h5>
                         <p><strong>Jenis Kertas:</strong> {{ session('calculation_result')['kertas']->nama }}</p>
+                        <p><strong>Gramasi:</strong> {{ session('calculation_result.kertas')->gramasi }} g/m²</p>
+                        <p><strong>Ukuran Potong:</strong> {{ session('calculation_result')['input']['cut_width'] }}x{{ session('calculation_result')['input']['cut_height'] }} mm</p>
                         <p><strong>Ukuran Plano:</strong> {{ session('calculation_result')['kertas']->panjang }}x{{ session('calculation_result')['kertas']->lebar }} mm</p>
-                        <p><strong>Harga per Lembar:</strong> Rp {{ number_format(session('calculation_result')['kertas']->harga_per_lembar, 0, ',', '.') }}</p>
+                        <p><strong>Jumlah Potongan per Plano:</strong> {{ session('calculation_result')['jumlah_potongan'] }}</p>
                         <p><strong>Potongan Dibutuhkan:</strong> {{ number_format(session('calculation_result')['lembar_dibutuhkan'], 0, ',', '.') }} lembar</p>
                         <p><strong>Plano Dibutuhkan:</strong> {{ session('calculation_result')['plano_dibutuhkan'] }} lembar</p>
-                        <p><strong>Luas Area Cetak:</strong> {{ number_format(session('calculation_result')['luas_area_cetak'], 0, ',', '.') }} mm<sup>2</sup></p>
                         <p><strong>Total Harga Kertas:</strong> Rp {{ number_format(session('calculation_result')['total_harga_kertas'], 0, ',', '.') }}</p>
-                        <p><strong>Jumlah Potongan per Plano:</strong> {{ session('calculation_result')['jumlah_potongan'] }}</p>
+                        
                     </div>
+
+                    <!-- Kolom Tinta -->
+                        <div class="col-md-6">
+                            
+                                <h5><i class="fas fa-fill-drip"></i> Tinta</h5>
+                                <p><strong>Raster:</strong> {{ session('calculation_result')['raster'] }}%</p>
+                                <p><strong>Luas Area Cetak:</strong> {{ number_format(session('calculation_result')['luas_area_cetak'], 2, ',', '.') }} m²</p>
+                                <p><strong>Lembar per Kg:</strong> {{ number_format(session('calculation_result')['lembar_per_kg'], 2, ',', '.') }}</p>
+                                <p><strong>Total Gram Tinta:</strong> {{ number_format(session('calculation_result')['total_gram_tinta'], 2, ',', '.') }} gram</p>
+                                <p><strong>Biaya Tinta Proses:</strong> Rp {{ number_format(session('calculation_result')['biaya_tinta_proses'], 0, ',', '.') }}</p>
+                                <p><strong>Biaya Tinta Khusus:</strong> Rp {{ number_format(session('calculation_result')['biaya_tinta_khusus'], 0, ',', '.') }}</p>
+                                <p><strong>Total Biaya Tinta:</strong> <span class="text-danger">Rp {{ number_format(session('calculation_result')['total_biaya_tinta'], 0, ',', '.') }}</span></p>
+                                <hr>
+                                
+                            
+                        </div>
+
+
                 </div>
                 <hr>
                 <h5>Detail Input</h5>
@@ -127,6 +147,18 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label>Raster (%)</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" placeholder="Raster"
+                                       name="raster" value="{{ old('raster', session('calculation_result.input.raster') ?? '') }}" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label for="warna_proses">Warna Proses</label>
                             <select class="form-control select2" id="warna_proses" name="warna_proses[]" multiple="multiple" required>
                                 @foreach($tintasProses as $tinta)
@@ -193,6 +225,15 @@
                         min: "Insheet minimal 0%",
                         max: "Insheet maksimal 100%"
                     }
+                    insheet: {
+                        required: "Insheet harus diisi",
+                        min: "Insheet minimal 0%",
+                        max: "Insheet maksimal 100%"
+                    },
+                    raster: {
+                        required: "Raster harus diisi",
+                        min: "Raster minimal 10"
+                    }
                 },
                 errorElement: 'span',
                 errorPlacement: function (error, element) {
@@ -207,5 +248,14 @@
                 }
             });
         });
+        // Auto-calculate gramasi saat pilih kertas
+            $('#jenis_kertas').change(function() {
+                const kertasId = $(this).val();
+                if (kertasId) {
+                    $.get(`/api/kertas/${kertasId}`, function(data) {
+                        $('#gramasi_display').text(`${data.gramasi} g/m² (${data.jenis_kertas})`);
+                    });
+                }
+            });
     </script>
 @stop

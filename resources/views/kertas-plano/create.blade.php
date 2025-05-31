@@ -30,6 +30,14 @@
             <input type="number" name="gramasi" class="form-control" required>
 
         <div class="form-group">
+            <label>Jenis Kertas</label>
+            <select name="jenis_kertas" class="form-control" required>
+                <option value="coated">Coated</option>
+                <option value="uncoated">Uncoated</option>
+            </select>
+        </div>
+
+        <div class="form-group">
             <label>Harga per Lembar</label>
             <input type="number" step="0.01" name="harga_per_lembar" class="form-control" required>
         </div>

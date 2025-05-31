@@ -16,6 +16,7 @@
                 <th>Panjang (mm)</th>
                 <th>Lebar (mm)</th>
                 <th>Gramasi (gsm)</th>
+                <th>Jenis Kertas</th>
                 <th>Harga / Lembar</th>
                 <th>Aksi</th>
             </tr>
@@ -27,6 +28,7 @@
                     <td>{{ $item->panjang }}</td>
                     <td>{{ $item->lebar }}</td>
                     <td>{{ $item->gramasi }}</td>
+                    <td>{{ $item->jenis_kertas }}</td>
                     <td>Rp {{ number_format($item->harga_per_lembar, 0, ',', '.') }}</td>
                     <td>
                         <a href="{{ route('kertas-plano.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>

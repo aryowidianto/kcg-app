@@ -9,6 +9,6 @@ class KertasPlano extends Model
 {
     use HasFactory;
     protected $table = 'kertas_planos'; // Nama tabel di database
-    protected $fillable = ['nama', 'panjang', 'lebar', 'gramasi', 'harga_per_lembar'];
+    protected $fillable = ['nama', 'panjang', 'lebar', 'jenis_kertas', 'gramasi', 'harga_per_lembar'];
 
 }
