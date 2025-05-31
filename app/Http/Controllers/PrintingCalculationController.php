@@ -51,7 +51,6 @@ class PrintingCalculationController extends Controller
             $validated['cut_width'],
             $validated['cut_height']
         );
-
         // Kalkulasi kebutuhan kertas
         $insheetDecimal   = $validated['insheet'] / 100;
         $lembarDibutuhkan = ceil($validated['oplag'] + ($validated['oplag'] * $insheetDecimal));
@@ -59,18 +58,22 @@ class PrintingCalculationController extends Controller
         $totalHargaKertas = $planoDibutuhkan * $kertas->harga_per_lembar;
         $luasAreaCetak   = $lembarDibutuhkan * (($validated['cut_width'] / 1000) * ($validated['cut_height'] / 1000));
         $luasAreaCetakMeter = $luasAreaCetak / 10000; // Convert cm² to m²
+        $tintaProses = Tinta::whereIn('id', $request->input('warna_proses', []))->get();
+        $tintaKhusus = Tinta::whereIn('id', $request->input('warna_khusus', []))->get();
         // Kalkulasi kebutuhan tinta
         $tintaResult = KebutuhanTintaHelper::hitungKebutuhanTinta(
             $luasAreaCetakMeter,
             $kertas->gramasi,
             $kertas->jenis_kertas,
-            Tinta::whereIn('id', $request->input('warna_proses', []))->get(),
-            Tinta::whereIn('id', $request->input('warna_khusus', []))->get()
+            $tintaProses,
+            $tintaKhusus,
+            $lembarDibutuhkan,
+            $validated['raster']
         );
-
+        
         // Biaya per potong (opsional)
         $biayaPerPotong = $kertas->harga_per_lembar / max($jumlahPotongan, 1);
-
+        
         return redirect()->route('printing.calculation')->with([
             'calculation_result' => [
                 // Data kertas
@@ -85,8 +88,11 @@ class PrintingCalculationController extends Controller
                 'biaya_per_potong'    => $biayaPerPotong,
 
                 // Hasil kalkulasi tinta
+                'tinta_proses'        => $tintaProses,
+                'tinta_khusus'        => $tintaKhusus,
                 'raster'             => $validated['raster'],
                 'lembar_per_kg'       => $tintaResult['lembar_per_kg'] / ($validated['raster'] / 100),
+                'tinta_khusus_list'        => $tintaResult['tinta_khusus'],
                 'total_gram_tinta'    => $tintaResult['total_gram_tinta'],
                 'biaya_tinta_proses'  => $tintaResult['biaya_tinta_proses'],
                 'biaya_tinta_khusus'  => $tintaResult['biaya_tinta_khusus'],
