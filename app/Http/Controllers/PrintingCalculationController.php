@@ -56,13 +56,15 @@ class PrintingCalculationController extends Controller
         $lembarDibutuhkan = ceil($validated['oplag'] + ($validated['oplag'] * $insheetDecimal));
         $planoDibutuhkan  = ceil($lembarDibutuhkan / max($jumlahPotongan, 1));
         $totalHargaKertas = $planoDibutuhkan * $kertas->harga_per_lembar;
-        $luasAreaCetak   = $lembarDibutuhkan * (($validated['cut_width'] / 1000) * ($validated['cut_height'] / 1000));
-        $luasAreaCetakMeter = $luasAreaCetak / 10000; // Convert cm² to m²
+        $areaCetakPerLembar = $validated['cut_width'] * $validated['cut_height']; // mm²
+        $luasAreaCetak   = $lembarDibutuhkan * ($validated['cut_width'] * $validated['cut_height']);
+        $luasAreaCetakMeter = $luasAreaCetak / 1000000; // Convert mm² to m²
         $tintaProses = Tinta::whereIn('id', $request->input('warna_proses', []))->get();
         $tintaKhusus = Tinta::whereIn('id', $request->input('warna_khusus', []))->get();
         // Kalkulasi kebutuhan tinta
         $tintaResult = KebutuhanTintaHelper::hitungKebutuhanTinta(
             $luasAreaCetakMeter,
+            $areaCetakPerLembar,
             $kertas->gramasi,
             $kertas->jenis_kertas,
             $tintaProses,
@@ -90,16 +92,16 @@ class PrintingCalculationController extends Controller
                 // Hasil kalkulasi tinta
                 'tinta_proses'        => $tintaProses,
                 'tinta_khusus'        => $tintaKhusus,
-                'raster'             => $validated['raster'],
-                'lembar_per_kg'       => $tintaResult['lembar_per_kg'] / ($validated['raster'] / 100),
-                'tinta_khusus_list'        => $tintaResult['tinta_khusus'],
-                'total_gram_tinta'    => $tintaResult['total_gram_tinta'],
+                'raster'              => $validated['raster'],
+                'lembar_per_kg'       => $tintaResult['lembar_per_kg'],
+                'lembar_per_kg_tinta_khusus'   => $tintaResult['lembar_per_kg_tinta_khusus'],
                 'biaya_tinta_proses'  => $tintaResult['biaya_tinta_proses'],
                 'biaya_tinta_khusus'  => $tintaResult['biaya_tinta_khusus'],
                 'total_biaya_tinta'   => $tintaResult['biaya_tinta_proses'] + $tintaResult['biaya_tinta_khusus'],
 
                 // Data tambahan
-                'luas_area_cetak'     => $luasAreaCetakMeter,
+                'luas_area_cetak'       => $luasAreaCetakMeter,
+                'area_cetak_per_lembar' => $areaCetakPerLembar,
             ]
         ]);
     }
