@@ -33,16 +33,18 @@
                                 <h5><i class="fas fa-fill-drip"></i> Tinta</h5>
                                 <p><strong>Raster:</strong> {{ session('calculation_result')['raster'] }}%</p>
                                 <p><strong>Luas Area Cetak:</strong> {{ number_format(session('calculation_result')['luas_area_cetak'], 1, ',', '.') }} m²</p>
-                                @foreach (session('calculation_result')['tinta_proses'] as $tinta)
-                                    <p><strong>Lembar per Kg ({{$tinta->nama}}):</strong> {{ number_format(session('calculation_result')['lembar_per_kg'], 1, ',', '.') }} (Kebutuhan tinta: {{ number_format(session('calculation_result')['lembar_dibutuhkan'] / session('calculation_result')['lembar_per_kg'], 1, ',', '.')}} Kg)</p>
+                                @foreach (session('calculation_result')['tinta_proses_details'] as $tintaDetail)
+                                <p><strong>{{$tintaDetail['nama']}}:</strong>
+                                    {{ number_format($tintaDetail['lembar_per_kg'], 1, ',', '.') }} Lbr/Kg,
+                                    Butuh Tinta: {{ number_format($tintaDetail['kebutuhan_kg'], 1, ',', '.')}} Kg
+                                </p>
                                 @endforeach
                                 @foreach (session('calculation_result')['tinta_khusus_details'] as $tintaDetail)
-    <p><strong>Lembar per Kg ({{$tintaDetail['nama']}}):</strong> 
-        {{ number_format($tintaDetail['lembar_per_kg'], 1, ',', '.') }} 
-        (Kebutuhan tinta: {{ number_format($tintaDetail['kebutuhan_kg'], 1, ',', '.')}} Kg)
-    </p>
-@endforeach
-                                {{-- <p><strong>Total Gram Tinta:</strong> {{ number_format(session('calculation_result')['total_gram_tinta'], 2, ',', '.') }} gram</p> --}}
+                                <p><strong>{{$tintaDetail['nama']}}:</strong> 
+                                    {{ number_format($tintaDetail['lembar_per_kg'], 1, ',', '.') }} Lbr/Kg, 
+                                    Butuh tinta: {{ number_format($tintaDetail['kebutuhan_kg'], 1, ',', '.')}} Kg
+                                </p>
+                                @endforeach
                                 <p><strong>Biaya Tinta Proses:</strong> Rp {{ number_format(session('calculation_result')['biaya_tinta_proses'], 0, ',', '.') }}</p>
                                 <p><strong>Biaya Tinta Khusus:</strong> Rp {{ number_format(session('calculation_result')['biaya_tinta_khusus'], 0, ',', '.') }}</p>
                                 <p><strong>Total Biaya Tinta:</strong> <span class="text-danger">Rp {{ number_format(session('calculation_result')['total_biaya_tinta'], 0, ',', '.') }}</span></p>

@@ -61,6 +61,7 @@ class PrintingCalculationController extends Controller
         $luasAreaCetakMeter = $luasAreaCetak / 1000000; // Convert mm² to m²
         $tintaProses = Tinta::whereIn('id', $request->input('warna_proses', []))->get();
         $tintaKhusus = Tinta::whereIn('id', $request->input('warna_khusus', []))->get();
+       
         // Kalkulasi kebutuhan tinta
         $tintaResult = KebutuhanTintaHelper::hitungKebutuhanTinta(
             $luasAreaCetakMeter,
@@ -95,6 +96,7 @@ class PrintingCalculationController extends Controller
                 'raster'                => $validated['raster'],
                 'lembar_per_kg'         => $tintaResult['lembar_per_kg'],
                 'tinta_khusus_details'  => $tintaResult['tinta_khusus_details'], // Detail per tinta khusus
+                'tinta_proses_details'  => $tintaResult['tinta_proses_details'], // Detail per tinta proses
                 'biaya_tinta_proses'    => $tintaResult['biaya_tinta_proses'],
                 'biaya_tinta_khusus'    => $tintaResult['biaya_tinta_khusus'],
                 'total_biaya_tinta'     => $tintaResult['biaya_tinta_proses'] + $tintaResult['biaya_tinta_khusus'],
