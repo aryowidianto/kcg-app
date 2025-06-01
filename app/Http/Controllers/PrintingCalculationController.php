@@ -90,14 +90,14 @@ class PrintingCalculationController extends Controller
                 'biaya_per_potong'    => $biayaPerPotong,
 
                 // Hasil kalkulasi tinta
-                'tinta_proses'        => $tintaProses,
-                'tinta_khusus'        => $tintaKhusus,
-                'raster'              => $validated['raster'],
-                'lembar_per_kg'       => $tintaResult['lembar_per_kg'],
-                'lembar_per_kg_tinta_khusus'   => $tintaResult['lembar_per_kg_tinta_khusus'],
-                'biaya_tinta_proses'  => $tintaResult['biaya_tinta_proses'],
-                'biaya_tinta_khusus'  => $tintaResult['biaya_tinta_khusus'],
-                'total_biaya_tinta'   => $tintaResult['biaya_tinta_proses'] + $tintaResult['biaya_tinta_khusus'],
+                'tinta_proses'          => $tintaProses,
+                'tinta_khusus'          => $tintaKhusus,
+                'raster'                => $validated['raster'],
+                'lembar_per_kg'         => $tintaResult['lembar_per_kg'],
+                'tinta_khusus_details'  => $tintaResult['tinta_khusus_details'], // Detail per tinta khusus
+                'biaya_tinta_proses'    => $tintaResult['biaya_tinta_proses'],
+                'biaya_tinta_khusus'    => $tintaResult['biaya_tinta_khusus'],
+                'total_biaya_tinta'     => $tintaResult['biaya_tinta_proses'] + $tintaResult['biaya_tinta_khusus'],
 
                 // Data tambahan
                 'luas_area_cetak'       => $luasAreaCetakMeter,

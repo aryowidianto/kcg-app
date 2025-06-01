@@ -24,7 +24,7 @@
                         <p><strong>Potongan Dibutuhkan:</strong> {{ number_format(session('calculation_result')['lembar_dibutuhkan'], 0, ',', '.') }} lembar</p>
                         <p><strong>Plano Dibutuhkan:</strong> {{ session('calculation_result')['plano_dibutuhkan'] }} lembar</p>
                         <p><strong>Total Harga Kertas:</strong> Rp {{ number_format(session('calculation_result')['total_harga_kertas'], 0, ',', '.') }}</p>
-                        
+
                     </div>
 
                     <!-- Kolom Tinta -->
@@ -36,9 +36,12 @@
                                 @foreach (session('calculation_result')['tinta_proses'] as $tinta)
                                     <p><strong>Lembar per Kg ({{$tinta->nama}}):</strong> {{ number_format(session('calculation_result')['lembar_per_kg'], 1, ',', '.') }} (Kebutuhan tinta: {{ number_format(session('calculation_result')['lembar_dibutuhkan'] / session('calculation_result')['lembar_per_kg'], 1, ',', '.')}} Kg)</p>
                                 @endforeach
-                                @foreach (session('calculation_result')['tinta_khusus'] as $tinta)
-                                    <p><strong>Lembar per Kg ({{$tinta->nama}}):</strong> {{ number_format(session('calculation_result')['lembar_per_kg_tinta_khusus'], 1, ',', '.') }} (Kebutuhan tinta: {{ number_format(session('calculation_result')['lembar_dibutuhkan'] / session('calculation_result')['lembar_per_kg_tinta_khusus'], 1, ',', '.')}} Kg)</p>
-                                @endforeach
+                                @foreach (session('calculation_result')['tinta_khusus_details'] as $tintaDetail)
+    <p><strong>Lembar per Kg ({{$tintaDetail['nama']}}):</strong> 
+        {{ number_format($tintaDetail['lembar_per_kg'], 1, ',', '.') }} 
+        (Kebutuhan tinta: {{ number_format($tintaDetail['kebutuhan_kg'], 1, ',', '.')}} Kg)
+    </p>
+@endforeach
                                 {{-- <p><strong>Total Gram Tinta:</strong> {{ number_format(session('calculation_result')['total_gram_tinta'], 2, ',', '.') }} gram</p> --}}
                                 <p><strong>Biaya Tinta Proses:</strong> Rp {{ number_format(session('calculation_result')['biaya_tinta_proses'], 0, ',', '.') }}</p>
                                 <p><strong>Biaya Tinta Khusus:</strong> Rp {{ number_format(session('calculation_result')['biaya_tinta_khusus'], 0, ',', '.') }}</p>
@@ -161,34 +164,38 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="warna_proses">Warna Proses</label>
                             <select class="form-control select2" id="warna_proses" name="warna_proses[]" multiple="multiple" required>
                                 @foreach($tintasProses as $tinta)
                                     <option value="{{ $tinta->id }}"
-                                        {{ (collect(old('warna_proses', session('calculation_result.input.warna_proses') ?? []))->contains($tinta->id)) ? 'selected' : '' }}>
-                                        {{ $tinta->nama }}
+                                            {{ (collect(old('warna_proses', session('calculation_result.input.warna_proses') ?? []))->contains($tinta->id)) ? 'selected' : '' }}>
+                                            {{ $tinta->nama }}
                                     </option>
                                 @endforeach
                             </select>
                             <small class="form-text text-muted">Pilih maksimal 4 warna proses.</small>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                        <label for="warna_khusus">Warna Khusus</label>
+                        <select class="form-control select2" id="warna_khusus" name="warna_khusus[]" multiple="multiple" required>
+                            @foreach($tintasKhusus as $tinta)
+                                <option value="{{ $tinta->id }}"
+                                    {{ (collect(old('warna_khusus', session('calculation_result.input.warna_khusus') ?? []))->contains($tinta->id)) ? 'selected' : '' }}>
+                                    {{ $tinta->nama }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <small class="form-text text-muted"></small>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="warna_khusus">Warna Khusus</label>
-                    <select class="form-control select2" id="warna_khusus" name="warna_khusus[]" multiple="multiple" required>
-                        @foreach($tintasKhusus as $tinta)
-                            <option value="{{ $tinta->id }}"
-                                {{ (collect(old('warna_khusus', session('calculation_result.input.warna_khusus') ?? []))->contains($tinta->id)) ? 'selected' : '' }}>
-                                {{ $tinta->nama }}
-                            </option>
-                        @endforeach
-                    </select>
-                    <small class="form-text text-muted"></small>
-                </div>
+                
 
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-calculator"></i> Hitung Kalkulasi
