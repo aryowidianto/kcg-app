@@ -59,7 +59,7 @@
                                 {{ number_format(session('calculation_result')['biaya_tinta_proses'], 0, ',', '.') }}</p>
                             <p><strong>Biaya Tinta Khusus:</strong> Rp
                                 {{ number_format(session('calculation_result')['biaya_tinta_khusus'], 0, ',', '.') }}</p>
-                            <p><strong>Total Biaya Tinta:</strong> <span class="text-danger">Rp
+                            <p><strong>Total Biaya Tinta:</strong> <span>Rp
                                     {{ number_format(session('calculation_result')['total_biaya_tinta'], 0, ',', '.') }}</span>
                             </p>
                             <br>
@@ -67,31 +67,33 @@
                             @if (isset(session('calculation_result')['hpp']))
                                 <div class="mt-3">
                                     <h5><i class="fas fa-money-bill-wave"></i> HPP (Harga Pokok Produksi)</h5>
-                                    @foreach (session('calculation_result')['hpp']['biaya_tinta_proses'] as $key => $biayaTinta)
-                                        <p>
-                                            <b> Tinta {{session('calculation_result')['tinta_proses_details'][$key]['nama']}}:</b> Rp {{ number_format($biayaTinta, 1, ',', '.') }}
-                                        </p>
-                                    @endforeach
-                                    @foreach (session('calculation_result')['hpp']['biaya_tinta_khusus'] as $key => $biayaTinta)
-                                        <p>
-                                            <b>Tinta {{$key}}:</b> Rp {{ number_format($biayaTinta, 1, ',', '.') }}
-                                        </p>
-                                    @endforeach
+                                    <p><strong>Total Harga Kertas:</strong> Rp
+                                        {{ number_format(session('calculation_result')['total_harga_kertas'], 0, ',', '.') }}
+                                    </p>
+                                    <p><strong>Total Biaya Tinta:</strong> <span>Rp
+                                            {{ number_format(session('calculation_result')['total_biaya_tinta'], 0, ',', '.') }}</span>
+                                    </p>
+                                    <p><strong>{{ strtoupper(session('calculation_result')['input']['acuan_cetak']) }}:</strong>
+                                        Rp
+                                        {{ number_format(session('calculation_result')['hpp']['biaya_acuan_cetak'], 0, ',', '.') }}
+                                    </p>
                                     <p><strong>Listrik:</strong> Rp
                                         {{ number_format(session('calculation_result')['hpp']['biaya_listrik'], 0, ',', '.') }}
                                     </p>
-                                    <p><strong>Gaji:</strong> Rp
+                                    <p><strong>Upah Operator:</strong> Rp
                                         {{ number_format(session('calculation_result')['hpp']['biaya_gaji'], 0, ',', '.') }}
                                     </p>
-                                    <p><strong>Subtotal:</strong> Rp
-                                        {{ number_format(session('calculation_result')['hpp']['subtotal'], 0, ',', '.') }}
-                                    </p>
-                                    <p><strong>Operational ({{session('calculation_result')['input']['operational']}}%):</strong> Rp
+                                    <p><strong>Operational
+                                        ({{ session('calculation_result')['input']['operational'] }}%):</strong> Rp
                                         {{ number_format(session('calculation_result')['hpp']['operational'], 0, ',', '.') }}
                                     </p>
+                                    <p><strong>Lama Mesin Beroperasi:</strong>
+                                        {{ number_format(session('calculation_result')['hpp']['lama_operasi'], 1, ',', '.') }}
+                                        Jam
+                                    </p>
                                     <p><strong>Total HPP: <span class="text-danger">Rp
-                                            {{ number_format(session('calculation_result')['hpp']['hpp'], 0, ',', '.') }}</span>
-                                    </strong></p>
+                                                {{ number_format(session('calculation_result')['hpp']['hpp'], 0, ',', '.') }}</span>
+                                        </strong></p>
                                 </div>
                             @endif
 
@@ -229,32 +231,38 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="warna_proses">Warna Proses</label>
-                            <select class="form-control select2" id="warna_proses" name="warna_proses[]" multiple="multiple"
-                                required>
+                            <label>Warna Proses</label>
+                            <div>
                                 @foreach ($tintasProses as $tinta)
-                                    <option value="{{ $tinta->id }}"
-                                        {{ collect(old('warna_proses', session('calculation_result.input.warna_proses') ?? []))->contains($tinta->id) ? 'selected' : '' }}>
-                                        {{ $tinta->nama }}
-                                    </option>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            name="warna_proses[]"
+                                            id="warna_proses_{{ $tinta->id }}"
+                                            value="{{ $tinta->id }}"
+                                            {{ collect(old('warna_proses', session('calculation_result.input.warna_proses') ?? []))->contains($tinta->id) ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="warna_proses_{{ $tinta->id }}">{{ $tinta->nama }}</label>
+                                    </div>
                                 @endforeach
-                            </select>
-                            <small class="form-text text-muted">Pilih maksimal 4 warna proses.</small>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="warna_khusus">Warna Khusus</label>
-                            <select class="form-control select2" id="warna_khusus" name="warna_khusus[]"
-                                multiple="multiple" required>
+                            <label>Warna Khusus</label>
+                            <div>
                                 @foreach ($tintasKhusus as $tinta)
-                                    <option value="{{ $tinta->id }}"
-                                        {{ collect(old('warna_khusus', session('calculation_result.input.warna_khusus') ?? []))->contains($tinta->id) ? 'selected' : '' }}>
-                                        {{ $tinta->nama }}
-                                    </option>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            name="warna_khusus[]"
+                                            id="warna_khusus_{{ $tinta->id }}"
+                                            value="{{ $tinta->id }}"
+                                            {{ collect(old('warna_khusus', session('calculation_result.input.warna_khusus') ?? []))->contains($tinta->id) ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="warna_khusus_{{ $tinta->id }}">{{ $tinta->nama }}</label>
+                                    </div>
                                 @endforeach
-                            </select>
-                            <small class="form-text text-muted"></small>
+                            </div>
                         </div>
                     </div>
 

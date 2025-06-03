@@ -21,6 +21,7 @@ Route::get('/', function () {
 Route::resource('kertas-plano', \App\Http\Controllers\KertasPlanoController::class);
 Route::resource('mesin-offset', \App\Http\Controllers\MesinOffsetController::class);
 Route::resource('tinta', \App\Http\Controllers\TintaController::class);
+Route::resource('config', \App\Http\Controllers\ConfigController::class);
 
 
 Route::get('/printing/calculation', [PrintingCalculationController::class, 'index'])->name('printing.calculation');

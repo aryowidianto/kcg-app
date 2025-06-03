@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Title
@@ -333,9 +332,15 @@ return [
             'url' => 'tinta',
             'icon' => 'far fa-fw fa-water_drop',
         ],
-        [   'text' => 'Data Mesin Offset',
+        [
+            'text' => 'Data Mesin Offset',
             'url' => 'mesin-offset',
             'icon' => 'fas fa-fw fa-cogs',
+        ],
+        [
+            'text' => 'Config',
+            'url' => 'config',
+            'icon' => 'fas fa-fw fa-sliders-h',
         ],
         [
             'text' => 'Dashboard',

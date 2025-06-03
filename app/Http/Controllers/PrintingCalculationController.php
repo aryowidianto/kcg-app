@@ -89,17 +89,16 @@ class PrintingCalculationController extends Controller
             $lembarDibutuhkan, // jumlahLintasan
             $validated['cut_width'],   // cutWidth
             $validated['cut_height'],   // cutHeight
-            $mesinOffset->kecepatan,  // kecepatanMesin
-            count($validated['warna_proses']),     // jumlahWarna
+            count(isset($validated['warna_proses']) ? $validated['warna_proses'] : []) + count(isset($validated['warna_khusus']) ? $validated['warna_khusus'] : []),     // jumlahWarna
             ($lembarDibutuhkan / $mesinOffset->kecepatan) + ((50 / 100) * $lembarDibutuhkan / $mesinOffset->kecepatan),   // lamaOperasiJam
             $mesinOffset->daya_listrik,  // konsumsiListrikWatt
             $config->tarif_pln,  // tarifPLN
-            $tintaResult['tinta_proses_details'], // penggunaanTinta
-            120000, // hargaTintaPerKg
             $config->gaji_per_jam,  // gajiPerJam
             $mesinOffset->jumlah_operator, // jumlahOperator
-            $validated['operational'] ?? 0, // operational
-            $tintaResult['tinta_khusus_details'] // tintaKhusus (optional, isi sesuai kebutuhan)
+            $validated['operational'] ?? 0, // operational,
+            ($validated['acuan_cetak'] === 'ctcp') ? $mesinOffset->harga_ctcp : $mesinOffset->harga_plate,
+            $tintaResult['biaya_tinta_proses'] + $tintaResult['biaya_tinta_khusus'],
+            $totalHargaKertas
         );
 
         // Biaya per potong (opsional)
