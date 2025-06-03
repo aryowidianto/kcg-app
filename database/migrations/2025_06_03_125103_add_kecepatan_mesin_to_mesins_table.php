@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('mesin_offsets', function (Blueprint $table) {
-            $table->integer('jumlah_operator')->after('upah_operator_per_jam')->nullable();
+            // $table->integer('jumlah_operator')->after('upah_operator_per_jam')->nullable();
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('mesin_offsets', function (Blueprint $table) {
-            $table->dropColumn('jumlah_operator');
+            // $table->dropColumn('jumlah_operator');
         });
     }
 };
