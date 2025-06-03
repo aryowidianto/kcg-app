@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('configs', function (Blueprint $table) {
-            $table->id();
-            $table->int('tarif_pln'); // Nama konfigurasi
-            $table->timestamps();
+        Schema::table('mesin_offsets', function (Blueprint $table) {
+            $table->integer('jumlah_operator')->default(1)->after('upah_operator_per_jam');
         });
     }
 
@@ -23,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('configs');
+        Schema::table('mesin_offsets', function (Blueprint $table) {
+            $table->dropColumn('jumlah_operator');
+        });
     }
 };

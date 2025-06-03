@@ -156,17 +156,16 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Raster (%)</label>
-                            <div class="input-group">
-                                <input type="number" class="form-control" placeholder="Raster"
-                                       name="raster" value="{{ old('raster', session('calculation_result.input.raster') ?? '') }}" required>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">%</span>
-                                </div>
-                            </div>
+                            <label for="acuan_cetak">Acuan Cetak</label>
+                            <select class="form-control" id="acuan_cetak" name="acuan_cetak" required>
+                                <option value="ctcp" {{ old('acuan_cetak', session('calculation_result.input.acuan_cetak') ?? '') == 'ctcp' ? 'selected' : '' }}>CTCP</option>
+                                <option value="plate" {{ old('acuan_cetak', session('calculation_result.input.acuan_cetak') ?? '') == 'plate' ? 'selected' : '' }}>Plate</option>
+                            </select>
                         </div>
                     </div>
                 </div>
+
+
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -196,6 +195,22 @@
                         <small class="form-text text-muted"></small>
                         </div>
                     </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Raster (%)</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" placeholder="Raster"
+                                       name="raster" value="{{ old('raster', session('calculation_result.input.raster') ?? '') }}" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    
                 </div>
                 
 

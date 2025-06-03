@@ -16,6 +16,7 @@ class MesinOffset extends Model
         'harga_ctcp', 'harga_plate',
         'daya_listrik',
         'upah_operator_per_jam',
+        'jumlah_operator'
     ];
     
 }

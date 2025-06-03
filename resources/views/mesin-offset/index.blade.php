@@ -20,6 +20,7 @@
                 <th>Harga Plate</th>
                 <th>Daya Listrik</th>
                 <th>Upah Operator</th>
+                <th>Jumlah Operator</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -34,6 +35,7 @@
                     <td>Rp {{ number_format($item->harga_plate, 0, ',', '.') }}</td>
                     <td>{{ $item->daya_listrik }} Watt</td>
                     <td>Rp {{ number_format($item->upah_operator_per_jam, 0, ',', '.') }}</td>
+                    <td>{{ $item->jumlah_operator }} Orang</td>
                     <td>
                         <a href="{{ route('mesin-offset.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
                         <form action="{{ route('mesin-offset.destroy', $item->id) }}" method="POST" style="display:inline;">

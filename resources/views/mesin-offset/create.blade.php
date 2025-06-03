@@ -64,6 +64,11 @@
             <input type="number" step="0.01" name="upah_operator_per_jam" class="form-control" required>
         </div>
 
+        <div class="form-group">
+            <label>Jumlah Operator</label>
+            <input type="number" name="jumlah_operator" class="form-control" required>
+        </div>
+
         <button type="submit" class="btn btn-success">Simpan</button>
         <a href="{{ route('mesin-offset.index') }}" class="btn btn-secondary">Kembali</a>
     </form>

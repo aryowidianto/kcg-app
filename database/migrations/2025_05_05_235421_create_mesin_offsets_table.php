@@ -23,8 +23,6 @@ return new class extends Migration
         $table->decimal('harga_plate', 12, 2);
         $table->decimal('daya_listrik'); // dalam watt
         $table->decimal('upah_operator_per_jam', 12, 2);
-        $table->integer('kecepatan_mesin');
-        $table->integer('jumlah_operator');
         $table->timestamps();
     });
 }

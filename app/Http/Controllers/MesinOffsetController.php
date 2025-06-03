@@ -40,6 +40,7 @@ class MesinOffsetController extends Controller
         'harga_plate' => 'required|numeric',
         'daya_listrik' => 'required|numeric',
         'upah_operator_per_jam' => 'required|numeric',
+        'jumlah_operator' => 'required|integer',
     ]);
 
     \App\Models\MesinOffset::create($request->all());
@@ -61,7 +62,8 @@ class MesinOffsetController extends Controller
      */
     public function edit(string $id)
     {
-        //
+    $mesin = \App\Models\MesinOffset::findOrFail($id);
+    return view('mesin-offset.edit', compact('mesin'));
     }
 
     /**
@@ -69,7 +71,24 @@ class MesinOffsetController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'nama' => 'required',
+            'kecepatan' => 'required|integer',
+            'min_panjang' => 'required|integer',
+            'min_lebar' => 'required|integer',
+            'max_panjang' => 'required|integer',
+            'max_lebar' => 'required|integer',
+            'harga_ctcp' => 'required|numeric',
+            'harga_plate' => 'required|numeric',
+            'daya_listrik' => 'required|numeric',
+            'upah_operator_per_jam' => 'required|numeric',
+            'jumlah_operator' => 'required|integer',
+        ]);
+
+        $mesin = \App\Models\MesinOffset::findOrFail($id);
+        $mesin->update($request->all());
+
+        return redirect()->route('mesin-offset.index')->with('success', 'Mesin berhasil diperbarui.');
     }
 
     /**
