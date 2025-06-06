@@ -7,5 +7,5 @@
 @endsection
 
 @section('content')
-    <p>Welcome to HPP Cetak Offset!</p>
+    <p>Kezia Cipta Gemilang Printing Calculator</p>
 @endsection

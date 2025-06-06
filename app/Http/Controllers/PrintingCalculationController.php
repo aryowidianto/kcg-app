@@ -93,7 +93,7 @@ class PrintingCalculationController extends Controller
             ($lembarDibutuhkan / $mesinOffset->kecepatan) + ((50 / 100) * $lembarDibutuhkan / $mesinOffset->kecepatan),   // lamaOperasiJam
             $mesinOffset->daya_listrik,  // konsumsiListrikWatt
             $config->tarif_pln,  // tarifPLN
-            $config->gaji_per_jam,  // gajiPerJam
+            $mesinOffset->upah_operator_per_jam,  // gajiPerJam
             $mesinOffset->jumlah_operator, // jumlahOperator
             $validated['operational'] ?? 0, // operational,
             ($validated['acuan_cetak'] === 'ctcp') ? $mesinOffset->harga_ctcp : $mesinOffset->harga_plate,

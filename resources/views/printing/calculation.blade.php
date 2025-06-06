@@ -73,27 +73,24 @@
                                     <p><strong>Total Biaya Tinta:</strong> <span>Rp
                                             {{ number_format(session('calculation_result')['total_biaya_tinta'], 0, ',', '.') }}</span>
                                     </p>
-                                    <p><strong>{{ strtoupper(session('calculation_result')['input']['acuan_cetak']) }}:</strong>
+                                    <p><strong>Biaya {{ strtoupper(session('calculation_result')['input']['acuan_cetak']) }}:</strong>
                                         Rp
                                         {{ number_format(session('calculation_result')['hpp']['biaya_acuan_cetak'], 0, ',', '.') }}
                                     </p>
-                                    <p><strong>Listrik:</strong> Rp
+                                    <p><strong>Biaya Listrik:</strong> Rp
                                         {{ number_format(session('calculation_result')['hpp']['biaya_listrik'], 0, ',', '.') }}
                                     </p>
                                     <p><strong>Upah Operator:</strong> Rp
                                         {{ number_format(session('calculation_result')['hpp']['biaya_gaji'], 0, ',', '.') }}
                                     </p>
-                                    <p><strong>Operational
+                                    <p><strong>Operasional
                                         ({{ session('calculation_result')['input']['operational'] }}%):</strong> Rp
                                         {{ number_format(session('calculation_result')['hpp']['operational'], 0, ',', '.') }}
                                     </p>
-                                    <p><strong>Lama Mesin Beroperasi:</strong>
-                                        {{ number_format(session('calculation_result')['hpp']['lama_operasi'], 1, ',', '.') }}
-                                        Jam
-                                    </p>
                                     <p><strong>Total HPP: <span class="text-danger">Rp
                                                 {{ number_format(session('calculation_result')['hpp']['hpp'], 0, ',', '.') }}</span>
-                                        </strong></p>
+                                        </strong>
+                                    </p>
                                 </div>
                             @endif
 
@@ -104,8 +101,8 @@
                     <hr>
                     <h5>Detail Input</h5>
                     <ul>
-                        <li>Oplag: {{ session('calculation_result')['input']['oplag'] }}</li>
-                        <li>Insheet: {{ session('calculation_result')['input']['insheet'] }}%</li>
+                        <li>Oplag: {{ number_format(session('calculation_result')['input']['oplag'], 0, ',', '.') }} Eksemplar</li>
+                        <li>Insheet: {{ session('calculation_result')['input']['insheet'] }}% ({{ number_format(session('calculation_result')['input']['insheet'] / 100 * session('calculation_result')['input']['oplag'], 0, ',', '.') }} Lembar)</li>
                         <li>Warna Proses:
                             @php
                                 $warnaProsesIds = session('calculation_result.input.warna_proses') ?? [];
@@ -125,6 +122,9 @@
                                     ->toArray();
                             @endphp
                             {{ implode(', ', $namaWarnaKhusus) }}
+                        </li>
+                        <li>Lama Mesin Beroperasi:
+                            {{ number_format(session('calculation_result')['hpp']['lama_operasi'], 0, ',', '.') }} Jam
                         </li>
                     </ul>
                 </div>
@@ -281,9 +281,9 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Operational (%)</label>
+                            <label>Operasional (%)</label>
                             <div class="input-group">
-                                <input type="number" class="form-control" placeholder="Operational" name="operational"
+                                <input type="number" class="form-control" placeholder="Operasional" name="operational"
                                     value="{{ old('operational', session('calculation_result.input.operational') ?? '') }}"
                                     required>
                                 <div class="input-group-append">
