@@ -132,6 +132,8 @@ class PrintingCalculationController extends Controller
                 'luas_area_cetak' => $luasAreaCetakMeter,
                 'area_cetak_per_lembar' => $areaCetakPerLembar,
 
+                
+                
                 // hpp
                 'hpp' => $hppResult,
             ]

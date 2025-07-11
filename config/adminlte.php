@@ -338,6 +338,11 @@ return [
             'icon' => 'fas fa-fw fa-cogs',
         ],
         [
+            'text' => 'Data Mesin Finishing',
+            'url' => 'mesin-finishing',
+            'icon' => 'fas fa-fw fa-cogs',
+        ],
+        [
             'text' => 'Config',
             'url' => 'config',
             'icon' => 'fas fa-fw fa-sliders-h',

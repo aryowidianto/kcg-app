@@ -27,6 +27,7 @@ class PrintingCostHelper
     // HPP Total
     $hpp = $subtotal + $operational;
 
+
     return [
       'lama_operasi' => $lamaOperasiJam,
       'luas_cetak' => $luasCetak,

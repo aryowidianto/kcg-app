@@ -91,6 +91,10 @@
                                                 {{ number_format(session('calculation_result')['hpp']['hpp'], 0, ',', '.') }}</span>
                                         </strong>
                                     </p>
+
+
+
+
                                 </div>
                             @endif
 
@@ -292,6 +296,8 @@
                             </div>
                         </div>
                     </div>
+
+                    
 
 
 
