@@ -15,4 +15,9 @@ class MesinFinishing extends Model
         'upah_operator_per_jam',
         'jumlah_operator'
     ];
+
+    public function finishings()
+    {
+        return $this->hasMany(Finishing::class);
+    }
 }
