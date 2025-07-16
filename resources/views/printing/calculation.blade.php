@@ -269,7 +269,10 @@
                             </div>
                         </div>
                     </div>
+                </div>
 
+
+                <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Raster (%)</label>
@@ -296,11 +299,31 @@
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    
-
-
-
+                <!-- Form Finishing -->
+                <div class="form-group">
+                    <label>Pilih Finishing (Opsional):</label>
+                        <div class="row">
+                            @foreach($finishings as $finishing)
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input 
+                                        type="checkbox" 
+                                        name="finishings[]" 
+                                        id="finishing-{{ $finishing->id }}" 
+                                        value="{{ $finishing->id }}"
+                                        class="form-check-input"
+                                        {{ in_array($finishing->id, old('finishings', session('calculation_result.input.finishings') ?? [])) ? 'checked' : '' }}
+                                        >
+                        <label class="form-check-label" for="finishing-{{ $finishing->id }}">
+                        {{ $finishing->jenis_finishing }} 
+                        <small class="text-muted">(Rp {{ number_format($finishing->hpp_trial, 0, ',', '.') }})</small>
+                        </label>
+                                </div>
+                        </div>
+                        @endforeach
+                    </div>
                 </div>
 
 

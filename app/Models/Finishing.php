@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Finishing extends Model
 {
     protected $fillable = [
-        'nama',
+        'jenis_finishing',
         'hpp_trial',
         'mesin_finishing_id'
     ];

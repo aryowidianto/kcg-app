@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Finishing;
+use App\Models\MesinFinishing;
 use Illuminate\Http\Request;
 
 class FinishingController extends Controller
@@ -11,8 +13,8 @@ class FinishingController extends Controller
      */
     public function index()
     {
-    $finishing = Finishing::with('mesin')->get();
-    return view('finishing.index', compact('finishing'));
+        $finishings = Finishing::with('mesin')->get();
+        return view('finishings.index', compact('finishings'));
     }
 
     /**
@@ -29,16 +31,16 @@ class FinishingController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-        'nama' => 'required|string|max:255',
-        'hpp_trial' => 'required|numeric',
-        'mesin_finishing_id' => 'required|exists:mesin_finishings,id'
-    ]);
+        $request->validate([
+            'jenis_finishing' => 'required|string|max:255',
+            'hpp_trial' => 'required|numeric',
+            'mesin_finishing_id' => 'required|exists:mesin_finishings,id'
+        ]);
 
-        Finishing::create($validated);
+        Finishing::create($request->all());
 
         return redirect()->route('finishings.index')
-            ->with('success', 'Finishing berhasil ditambahkan');
+            ->with('success', 'Data finishing berhasil ditambahkan');
     }
 
     /**
@@ -70,6 +72,9 @@ class FinishingController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $finishings = \App\Models\Finishing::findOrFail($id);
+        $finishings->delete();
+
+        return redirect()->route('finishings.index')->with('success', 'Data finishing berhasil dihapus!');
     }
 }

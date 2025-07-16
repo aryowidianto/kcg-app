@@ -335,7 +335,7 @@ return [
         [
 
             'text' => 'Data Finishing',
-            'url' => 'finishing',
+            'url' => 'finishings',
             'icon' => 'far fa-fw fa-water_drop',
         ],
         [

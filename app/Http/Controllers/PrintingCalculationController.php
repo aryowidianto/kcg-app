@@ -6,6 +6,8 @@ use App\Models\KertasPlano;
 use App\Models\Tinta;
 use App\Models\MesinOffset;
 use App\Models\Config;
+use App\Models\Finishing; // Import model Finishing
+
 use Illuminate\Http\Request;
 use App\Helpers\PlanoHelper;
 use App\Helpers\KebutuhanTintaHelper;
@@ -19,12 +21,14 @@ class PrintingCalculationController extends Controller
         $mesinOffsets = MesinOffset::orderBy('nama')->get();
         $tintasProses = Tinta::where('jenis', 'warna proses')->orderBy('nama')->get();
         $tintasKhusus = Tinta::where('jenis', 'warna khusus')->orderBy('nama')->get();
+        $finishings = Finishing::with('mesin')->get(); // Ambil data finishing
 
         return view('printing.calculation', compact(
             'kertasPlanos',
             'mesinOffsets',
             'tintasProses',
-            'tintasKhusus'
+            'tintasKhusus',
+            'finishings'
         ));
     }
 
@@ -47,6 +51,7 @@ class PrintingCalculationController extends Controller
             'warna_khusus' => 'nullable|array',
             'warna_khusus.*' => 'exists:tintas,id',
             'operational' => 'nullable|numeric|min:0',
+            'finishing_id' => 'nullable|exists:finishings,id',
         ]);
 
         // Ambil data kertas
@@ -100,6 +105,19 @@ class PrintingCalculationController extends Controller
             $tintaResult['biaya_tinta_proses'] + $tintaResult['biaya_tinta_khusus'],
             $totalHargaKertas
         );
+
+        // ===== [KALKULASI FINISHING] =====
+        $biayaFinishing = 0;
+        $finishingDetail = null;
+
+        if ($request->finishing_id) {
+            $finishing = Finishing::with('mesinFinishing')->find($request->finishing_id);
+            $finishingDetail = $finishing;
+        
+            // Hitung biaya finishing per lembar
+            $biayaFinishing = $finishing->hpp_trial / $finishing->mesinFinishing->kecepatan;
+            $biayaFinishingTotal = $biayaFinishing * $lembarDibutuhkan;
+        }
 
         // Biaya per potong (opsional)
         $biayaPerPotong = $kertas->harga_per_lembar / max($jumlahPotongan, 1);

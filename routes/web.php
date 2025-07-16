@@ -23,7 +23,7 @@ Route::resource('mesin-offset', \App\Http\Controllers\MesinOffsetController::cla
 Route::resource('mesin-finishing', \App\Http\Controllers\MesinFinishingController::class);
 Route::resource('tinta', \App\Http\Controllers\TintaController::class);
 Route::resource('config', \App\Http\Controllers\ConfigController::class);
-Route::resource('finishing', \App\Http\Controllers\FinishingController::class);
+Route::resource('finishings', \App\Http\Controllers\FinishingController::class);
 
 
 

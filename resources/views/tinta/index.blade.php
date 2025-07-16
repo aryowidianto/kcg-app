@@ -25,8 +25,8 @@
                 <tr>
                     <td>{{ $item->nama }}</td>
                     <td>{{ $item->jenis }}</td>
-                    <td>{{ $item->bobot_coated }}</td>
-                    <td>{{ $item->bobot_uncoated }}</td>
+                    <td>{{ number_format($item->bobot_coated, 2, ',', '.') }}</td>
+                    <td>{{ number_format($item->bobot_uncoated, 2, ',', '.') }}</td>
                     <td>Rp {{ number_format($item->harga, 0, ',', '.') }}</td>
                     <td>
                         <a href="{{ route('tinta.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
