@@ -330,18 +330,18 @@ return [
 
             'text' => 'Data Tinta',
             'url' => 'tinta',
-            'icon' => 'far fa-fw fa-water_drop',
+            'icon' => 'fas fa-fw fa-eye-dropper',
         ],
         [
 
             'text' => 'Data Finishing',
             'url' => 'finishings',
-            'icon' => 'far fa-fw fa-water_drop',
+            'icon' => 'fas fa-fw fa-cube',
         ],
         [
             'text' => 'Data Mesin Offset',
             'url' => 'mesin-offset',
-            'icon' => 'fas fa-fw fa-cogs',
+            'icon' => 'fas fa-fw fa-print',
         ],
         [
             'text' => 'Data Mesin Finishing',
