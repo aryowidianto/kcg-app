@@ -11,7 +11,8 @@ class FinishingController extends Controller
      */
     public function index()
     {
-        //
+    $finishing = Finishing::with('mesin')->get();
+    return view('finishing.index', compact('finishing'));
     }
 
     /**

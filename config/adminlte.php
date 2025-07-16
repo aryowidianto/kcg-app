@@ -333,6 +333,12 @@ return [
             'icon' => 'far fa-fw fa-water_drop',
         ],
         [
+
+            'text' => 'Data Finishing',
+            'url' => 'finishing',
+            'icon' => 'far fa-fw fa-water_drop',
+        ],
+        [
             'text' => 'Data Mesin Offset',
             'url' => 'mesin-offset',
             'icon' => 'fas fa-fw fa-cogs',
