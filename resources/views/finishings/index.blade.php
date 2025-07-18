@@ -30,7 +30,7 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $finishing->jenis_finishing }}</td>
                         <td>Rp {{ number_format($finishing->hpp_trial, 2, ',', '.') }}</td>
-                        <td>{{ $finishing->mesin->nama }}</td>
+                        <td>{{ $finishing->mesinFinishing->nama }}</td>
                         <td>
                             <a href="{{ route('finishings.edit', $finishing->id) }}" class="btn btn-sm btn-warning">
                                 <i class="fas fa-edit"></i>

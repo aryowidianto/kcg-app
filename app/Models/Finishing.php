@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\MesinFinishing;
 
 class Finishing extends Model
 {
@@ -13,8 +14,8 @@ class Finishing extends Model
         'mesin_finishing_id'
     ];
 
-    public function mesin()
+    public function mesinFinishing()
     {
-        return $this->belongsTo(MesinFinishing::class, 'mesin_finishing_id');
+        return $this->belongsTo(MesinFinishing::class);
     }
 }

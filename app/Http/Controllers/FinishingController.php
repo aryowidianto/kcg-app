@@ -13,7 +13,7 @@ class FinishingController extends Controller
      */
     public function index()
     {
-        $finishings = Finishing::with('mesin')->get();
+        $finishings = Finishing::with('mesinFinishing')->get();
         return view('finishings.index', compact('finishings'));
     }
 

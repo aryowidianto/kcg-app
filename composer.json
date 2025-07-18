@@ -28,7 +28,8 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/Helpers/PlanoHelper.php"
+            "app/Helpers/PlanoHelper.php",
+            "app/Helpers/FinishingCostHelper.php"
         ]
     },
     "autoload-dev": {

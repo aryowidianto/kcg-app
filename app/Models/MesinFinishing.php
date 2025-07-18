@@ -18,6 +18,6 @@ class MesinFinishing extends Model
 
     public function finishings()
     {
-        return $this->hasMany(Finishing::class);
+        return $this->belongsTo(MesinFinishing::class);
     }
 }

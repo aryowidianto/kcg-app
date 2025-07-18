@@ -14,6 +14,7 @@
                 <div class="alert alert-info">
                     <h4><i class="icon fas fa-info-circle"></i> Hasil Kalkulasi</h4>
                     <div class="row">
+                        <!-- Kolom Kertas -->
                         <div class="col-md-6">
                             <h5><i class="fas fa-paperclip"></i> Kertas</h5>
                             <p><strong>Jenis Kertas:</strong> {{ session('calculation_result')['kertas']->nama }}</p>
@@ -62,6 +63,28 @@
                             <p><strong>Total Biaya Tinta:</strong> <span>Rp
                                     {{ number_format(session('calculation_result')['total_biaya_tinta'], 0, ',', '.') }}</span>
                             </p>
+
+                            <!-- Kolom Finishing -->
+                        <div class="col-md-6">
+                            {{-- Finishing Section --}}
+                            @if (isset(session('calculation_result')['finishing']))
+                            <hr>
+                            <h5><i class="fas fa-tools"></i> Biaya Finishing</h5>
+                            @foreach (session('calculation_result')['finishing'] as $item)
+                            <p><strong>{{ $item['jenis_finishing'] }}:</strong> Rp {{ number_format($item['total_biaya'], 0, ',', '.') }}</p>
+                            @endforeach
+                            <p><strong>Total Finishing:</strong> <span class="text-danger">Rp
+                            {{ number_format(collect(session('calculation_result')['finishing'])->sum('total_biaya'), 0, ',', '.') }}
+                            </span></p>
+                            @endif
+                        </div>
+
+
+
+
+
+
+
                             <br>
                             {{-- HPP Section --}}
                             @if (isset(session('calculation_result')['hpp']))
@@ -271,6 +294,27 @@
                     </div>
                 </div>
 
+                <div class="col-md-6">
+    <div class="form-group">
+    <label>Finishing</label>
+    <div>
+        @foreach ($finishings as $finishing)
+            <div class="form-check form-check-inline">
+                <input class="form-check-input"
+                    type="checkbox"
+                    name="finishing[]"
+                    id="finishing_{{ $finishing->id }}"
+                    value="{{ $finishing->id }}"
+                    {{ collect(old('finishing', session('calculation_result.input.finishing') ?? []))->contains($finishing->id) ? 'checked' : '' }}>
+                <label class="form-check-label" for="finishing_{{ $finishing->id }}">{{ $finishing->jenis_finishing }}</label>
+            </div>
+        @endforeach
+    </div>
+</div>
+
+
+
+
 
                 <div class="row">
                     <div class="col-md-6">
@@ -301,30 +345,6 @@
                     </div>
                 </div>
 
-                <!-- Form Finishing -->
-                <div class="form-group">
-                    <label>Pilih Finishing (Opsional):</label>
-                        <div class="row">
-                            @foreach($finishings as $finishing)
-                            <div class="col-md-4">
-                                <div class="form-check">
-                                    <input 
-                                        type="checkbox" 
-                                        name="finishings[]" 
-                                        id="finishing-{{ $finishing->id }}" 
-                                        value="{{ $finishing->id }}"
-                                        class="form-check-input"
-                                        {{ in_array($finishing->id, old('finishings', session('calculation_result.input.finishings') ?? [])) ? 'checked' : '' }}
-                                        >
-                        <label class="form-check-label" for="finishing-{{ $finishing->id }}">
-                        {{ $finishing->jenis_finishing }} 
-                        <small class="text-muted">(Rp {{ number_format($finishing->hpp_trial, 0, ',', '.') }})</small>
-                        </label>
-                                </div>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
 
 
                 <button type="submit" class="btn btn-primary">

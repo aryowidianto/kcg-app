@@ -6,12 +6,13 @@ use App\Models\KertasPlano;
 use App\Models\Tinta;
 use App\Models\MesinOffset;
 use App\Models\Config;
-use App\Models\Finishing; // Import model Finishing
+use App\Models\Finishing;
 
 use Illuminate\Http\Request;
 use App\Helpers\PlanoHelper;
 use App\Helpers\KebutuhanTintaHelper;
 use App\Helpers\PrintingCostHelper;
+use App\Helpers\FinishingCostHelper;
 
 class PrintingCalculationController extends Controller
 {
@@ -21,20 +22,20 @@ class PrintingCalculationController extends Controller
         $mesinOffsets = MesinOffset::orderBy('nama')->get();
         $tintasProses = Tinta::where('jenis', 'warna proses')->orderBy('nama')->get();
         $tintasKhusus = Tinta::where('jenis', 'warna khusus')->orderBy('nama')->get();
-        $finishings = Finishing::with('mesin')->get(); // Ambil data finishing
+        $finishings   = Finishing::with('mesinFinishing')->orderBy('jenis_finishing')->get();
 
         return view('printing.calculation', compact(
             'kertasPlanos',
             'mesinOffsets',
             'tintasProses',
             'tintasKhusus',
-            'finishings'
+            'finishings',
         ));
     }
 
     public function calculate(Request $request)
     {
-        // dd($request->all());dd
+
         $validated = $request->validate([
             'oplag' => 'required|integer|min:1',
             'insheet' => 'required|numeric|min:0|max:100',
@@ -51,7 +52,6 @@ class PrintingCalculationController extends Controller
             'warna_khusus' => 'nullable|array',
             'warna_khusus.*' => 'exists:tintas,id',
             'operational' => 'nullable|numeric|min:0',
-            'finishing_id' => 'nullable|exists:finishings,id',
         ]);
 
         // Ambil data kertas
@@ -106,27 +106,29 @@ class PrintingCalculationController extends Controller
             $totalHargaKertas
         );
 
-        // ===== [KALKULASI FINISHING] =====
-        $biayaFinishing = 0;
-        $finishingDetail = null;
-
-        if ($request->finishing_id) {
-            $finishing = Finishing::with('mesinFinishing')->find($request->finishing_id);
-            $finishingDetail = $finishing;
-        
-            // Hitung biaya finishing per lembar
-            $biayaFinishing = $finishing->hpp_trial / $finishing->mesinFinishing->kecepatan;
-            $biayaFinishingTotal = $biayaFinishing * $lembarDibutuhkan;
-        }
-
         // Biaya per potong (opsional)
         $biayaPerPotong = $kertas->harga_per_lembar / max($jumlahPotongan, 1);
+
+        
+        // Kalkulasi Finishing
+        $hppFinishing = [];
+
+        if ($request->has('finishing')) {
+            $hppFinishing = FinishingCostHelper::hitungFinishing(
+                $request->input('finishing'),
+                $lembarDibutuhkan,
+                $validated['cut_width'],
+                $validated['cut_height']
+            );
+        }
 
         return redirect()->route('printing.calculation')->with([
             'calculation_result' => [
                 // Data kertas
                 'kertas' => $kertas,
-                'input' => $validated,
+                'input' => array_merge($validated, [
+                'finishing' => $request->finishing ?? [],
+                ]),
 
                 // Hasil kalkulasi kertas
                 'lembar_dibutuhkan' => $lembarDibutuhkan,
@@ -146,6 +148,11 @@ class PrintingCalculationController extends Controller
                 'biaya_tinta_khusus' => $tintaResult['biaya_tinta_khusus'],
                 'total_biaya_tinta' => $tintaResult['biaya_tinta_proses'] + $tintaResult['biaya_tinta_khusus'],
 
+                // Finishing
+                'finishing' => $hppFinishing,
+                
+                
+                
                 // Data tambahan
                 'luas_area_cetak' => $luasAreaCetakMeter,
                 'area_cetak_per_lembar' => $areaCetakPerLembar,
@@ -154,6 +161,9 @@ class PrintingCalculationController extends Controller
                 
                 // hpp
                 'hpp' => $hppResult,
+
+
+                
             ]
         ]);
     }
