@@ -122,6 +122,9 @@ class PrintingCalculationController extends Controller
             );
         }
 
+        $hppTotal = $hppResult['hpp'] + collect($hppFinishing)->sum('total_biaya');
+        $hppPerLembar = $hppTotal / $validated['oplag'];
+
         return redirect()->route('printing.calculation')->with([
             'calculation_result' => [
                 // Data kertas
@@ -161,6 +164,9 @@ class PrintingCalculationController extends Controller
                 
                 // hpp
                 'hpp' => $hppResult,
+                'hpp_total' => $hppTotal,
+                'hpp_per_lembar' => $hppPerLembar,
+                
 
 
                 
