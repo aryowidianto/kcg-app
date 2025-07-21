@@ -5,6 +5,9 @@ class PrintingCostHelper
 {
   public static function hitungHPP($jumlahLintasan, $cutWidth, $cutHeight, $jumlahWarna, $lamaOperasiJam, $konsumsiListrikWatt, $tarifPLN, $gajiPerJam, $jumlahOperator, $operational, $biayaAcuanCetak, $totalBiayaTinta, $totalHargaKertas)
   {
+    
+    
+    
     // Luas Cetak (mm2)
     $luasCetak = $jumlahLintasan * $cutWidth * $cutHeight;
 

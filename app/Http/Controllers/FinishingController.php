@@ -54,18 +54,30 @@ class FinishingController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+    $finishing = \App\Models\Finishing::findOrFail($id);
+    $mesinFinishings = \App\Models\MesinFinishing::all();
+    return view('finishings.edit', compact('finishing', 'mesinFinishings'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'jenis_finishing' => 'required|string|max:255',
+            'hpp_trial' => 'required|numeric',
+            'mesin_finishing_id' => 'required|exists:mesin_finishings,id'
+        ]);
+
+        $finishing = \App\Models\Finishing::findOrFail($id);
+        $finishing->update($request->all());
+
+        return redirect()->route('finishings.index')->with('success', 'Data finishing berhasil diupdate!');
     }
+
 
     /**
      * Remove the specified resource from storage.

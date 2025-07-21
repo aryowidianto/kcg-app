@@ -91,17 +91,17 @@ class PrintingCalculationController extends Controller
         $config = Config::find(1); // Ambil konfigurasi dari database
         
         $hppResult = PrintingCostHelper::hitungHPP(
-            $lembarDibutuhkan, // jumlahLintasan
-            $validated['cut_width'],   // cutWidth
-            $validated['cut_height'],   // cutHeight
-            count(isset($validated['warna_proses']) ? $validated['warna_proses'] : []) + count(isset($validated['warna_khusus']) ? $validated['warna_khusus'] : []),     // jumlahWarna
-            ($lembarDibutuhkan / $mesinOffset->kecepatan) + ((50 / 100) * $lembarDibutuhkan / $mesinOffset->kecepatan),   // lamaOperasiJam
-            $mesinOffset->daya_listrik,  // konsumsiListrikWatt
-            $config->tarif_pln,  // tarifPLN
-            $mesinOffset->upah_operator_per_jam,  // gajiPerJam
-            $mesinOffset->jumlah_operator, // jumlahOperator
-            $validated['operational'] ?? 0, // operational,
-            ($validated['acuan_cetak'] === 'ctcp') ? $mesinOffset->harga_ctcp : $mesinOffset->harga_plate,
+            $jumlahLintasan = $lembarDibutuhkan, // jumlahLintasan
+            $cutWidth = $validated['cut_width'],   // cutWidth
+            $cutHeight = $validated['cut_height'],   // cutHeight
+            $jumlahWarna = count(isset($validated['warna_proses']) ? $validated['warna_proses'] : []) + count(isset($validated['warna_khusus']) ? $validated['warna_khusus'] : []),     // jumlahWarna
+            $lamaOperasiJam = ($lembarDibutuhkan / $mesinOffset->kecepatan) + ((50 / 100) * $lembarDibutuhkan / $mesinOffset->kecepatan),   // lamaOperasiJam
+            $konsumsiListrikWatt = $mesinOffset->daya_listrik,  // konsumsiListrikWatt
+            $tarifPLN = $config->tarif_pln,  // tarifPLN
+            $gajiPerJam = $mesinOffset->upah_operator_per_jam,  // gajiPerJam
+            $jumlahOperator = $mesinOffset->jumlah_operator, // jumlahOperator
+            $operational = $validated['operational'] ?? 0, // operational,
+            $biayaAcuanCetak = ($validated['acuan_cetak'] === 'ctcp') ? $mesinOffset->harga_ctcp : $mesinOffset->harga_plate,
             $tintaResult['biaya_tinta_proses'] + $tintaResult['biaya_tinta_khusus'],
             $totalHargaKertas
         );
@@ -117,8 +117,9 @@ class PrintingCalculationController extends Controller
             $hppFinishing = FinishingCostHelper::hitungFinishing(
                 $request->input('finishing'),
                 $lembarDibutuhkan,
-                $validated['cut_width'],
-                $validated['cut_height']
+                $cutWidth = $validated['cut_width'],
+                $cutHeight = $validated['cut_height'],
+                $tarifPLN = $config->tarif_pln
             );
         }
 
@@ -152,7 +153,7 @@ class PrintingCalculationController extends Controller
                 'total_biaya_tinta' => $tintaResult['biaya_tinta_proses'] + $tintaResult['biaya_tinta_khusus'],
 
                 // Finishing
-                'finishing' => $hppFinishing,
+                'hpp_finishing' => $hppFinishing,
                 
                 
                 

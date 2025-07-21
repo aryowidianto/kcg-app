@@ -25,7 +25,7 @@
                             <p><strong>Jumlah Potongan per Plano:</strong> {{ session('calculation_result')['jumlah_potongan'] }}</p>
                             <p><strong>Potongan Dibutuhkan:</strong> {{ number_format(session('calculation_result')['lembar_dibutuhkan'], 0, ',', '.') }} lembar</p>
                             <p><strong>Plano Dibutuhkan:</strong> {{ session('calculation_result')['plano_dibutuhkan'] }} lembar</p>
-                            <p><strong>Total Harga Kertas:</strong> Rp {{ number_format(session('calculation_result')['total_harga_kertas'], 0, ',', '.') }}</p>
+                            <p><strong>Total Biaya Kertas:</strong> Rp {{ number_format(session('calculation_result')['total_harga_kertas'], 0, ',', '.') }}</p>
                         </div>
 
                         <!-- Kolom Tinta -->
@@ -55,25 +55,31 @@
                         <!-- Kolom Finishing -->
                         <div class="col-md-6">
                             {{-- Finishing Section --}}
-                            @if (isset(session('calculation_result')['finishing']))
+                            @if (isset(session('calculation_result')['hpp_finishing']))
                                 <hr>
                                 <h5><i class="fas fa-tools"></i> Biaya Finishing</h5>
-                                @foreach (session('calculation_result')['finishing'] as $item)
-                                    <p><strong>{{ $item['jenis_finishing'] }}:</strong> Rp {{ number_format($item['total_biaya'], 0, ',', '.') }}</p>
+                                @foreach (session('calculation_result')['hpp_finishing'] as $item)
+                                    <p><strong>{{ $item['jenis_finishing'] }}:</strong> </p>
+                                    <ul>
+                                        <li>Durasi Finishing: {{ number_format($item['lama_operasi'], 2, ',', '.') }} Jam</li>
+                                        <li>Biaya Bahan: Rp {{ number_format($item['biaya'], 0, ',', '.') }}</li>
+                                        <li>Biaya Karyawan: Rp {{ number_format($item['biaya_karyawan_finishing'], 0, ',', '.') }}</li>
+                                        <li>Biaya Listrik: Rp {{ number_format($item['biaya_listrik_finishing'], 0, ',', '.') }}</li>
+                                        <li>Sub Total: Rp {{ number_format($item['total_biaya'], 0, ',', '.') }}</li>
+                                    </ul>
                                 @endforeach
-                                <p><strong>Total Finishing:</strong> <span class="text-danger">Rp {{ number_format(collect(session('calculation_result')['finishing'])->sum('total_biaya'), 0, ',', '.') }}</span></p>
+                                <p><strong>Total Biaya Finishing:</strong> <span class="text-danger">Rp {{ number_format(collect(session('calculation_result')['hpp_finishing'])->sum('total_biaya'), 0, ',', '.') }}</span></p>
                             @endif
                         </div>
                         <div class="col-md-6">
-                            {{-- Mesin Finishing Section --}}
-                            <br>
                             {{-- HPP Section --}}
                             @if (isset(session('calculation_result')['hpp']))
                                 <div class="mt-3">
                                     <h5><i class="fas fa-money-bill-wave"></i> HPP (Harga Pokok Produksi)</h5>
-                                    <p><strong>Total Harga Kertas:</strong> Rp {{ number_format(session('calculation_result')['total_harga_kertas'], 0, ',', '.') }}</p>
+                                    <p><strong>Total Biaya Kertas:</strong> Rp {{ number_format(session('calculation_result')['total_harga_kertas'], 0, ',', '.') }}</p>
                                     <p><strong>Total Biaya Tinta:</strong> <span>Rp {{ number_format(session('calculation_result')['total_biaya_tinta'], 0, ',', '.') }}</span></p>
                                     <p><strong>Biaya {{ strtoupper(session('calculation_result')['input']['acuan_cetak']) }}:</strong> Rp {{ number_format(session('calculation_result')['hpp']['biaya_acuan_cetak'], 0, ',', '.') }}</p>
+                                    <p><strong>Durasi Cetak:</strong> {{ number_format(session('calculation_result')['hpp']['lama_operasi'], 0, ',', '.') }} Jam</p>
                                     <p><strong>Biaya Listrik Cetak:</strong> Rp {{ number_format(session('calculation_result')['hpp']['biaya_listrik'], 0, ',', '.') }}</p>
                                     <p><strong>Upah Operator Cetak:</strong> Rp {{ number_format(session('calculation_result')['hpp']['biaya_gaji'], 0, ',', '.') }}</p>
                                     <p><strong>Operasional ({{ session('calculation_result')['input']['operational'] }}%):</strong> Rp {{ number_format(session('calculation_result')['hpp']['operational'], 0, ',', '.') }}</p>
