@@ -24,7 +24,7 @@ class FinishingCostHelper
                     
             $cutwidthCm = $cutWidth / 10; // Convert mm to cm
             $cutheightCm = $cutHeight / 10; // Convert mm to cm
-            $biaya = $cutwidthCm * $cutheightCm * $lembarDibutuhkan * $finishing->hpp_trial;
+            $biaya = ($cutwidthCm + 2) * ($cutheightCm + 2) * $lembarDibutuhkan * $finishing->hpp_trial;
             $kecepatan = $finishing->mesinFinishing->kecepatan ?: 1000;
             $lamaOperasiJam = ($lembarDibutuhkan / $kecepatan) + ((50 / 100) * $lembarDibutuhkan / $kecepatan);
             $biayaListrikFinishing = ($finishing->mesinFinishing->daya_listrik * $lamaOperasiJam) / 1000 * $tarifPLN; // kWh to Rp
